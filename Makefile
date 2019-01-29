@@ -1,8 +1,8 @@
-DATADIR=${DATADIR:-/usr/share}
-LIBDIR=${LIBDIR:-/usr/lib}
-LIBEXECDIR=${LIBEXECDIR:-/usr/lib/}
-SYSCONFDIR=${SYSCONFDIR:-/etc}
-PIPARGS=${PIPARGS:-} # use --user for local install
+DATADIR?=/usr/share
+LIBDIR?=/usr/lib
+LIBEXECDIR?=/usr/lib/
+SYSCONFDIR?=/etc
+PIPARGS?= # use --user for local install
 
 install:
 	@pip3 install ${PIPARGS} fuzzywuzzy
