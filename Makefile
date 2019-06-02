@@ -1,29 +1,27 @@
 DATADIR?=/usr/share
 DOC_DIR?=/usr/share/doc
 LIBDIR?=/usr/lib
-SYSCONFDIR?=/etc
-PIPARGS?= # use --user for local install
 
 
 clean:
 	@rm -rf ./build
 
 
-deb: build/package/DEBIAN/control build/package/DEBIAN/postinst build/package/DEBIAN/prerm
+deb: build/package/DEBIAN/control
 	fakeroot dpkg-deb -b build/package build/gnome-pass-search-provider.deb
-	lintian -Ivi build/gnome-pass-search-provider.deb
+	lintian -Ivi --suppress-tags debian-changelog-file-missing-or-wrong-name build/gnome-pass-search-provider.deb
 
 
 install: build/copyright build/changelog
 	@apt install python3-fuzzywuzzy
-	@xdg-desktop-menu install --novendor conf/org.gnome.Pass.SearchProvider.desktop
 
-	@install -Dm 0644 conf/org.gnome.Pass.SearchProvider.ini "${DATADIR}"/gnome-shell/search-providers/org.gnome.Pass.SearchProvider.ini
+	@install -Dm 0644 conf/org.gnome.Pass.SearchProvider.desktop "${DATADIR}"/applications/org.gnome.Pass.SearchProvider.desktop
 	@install -Dm 0644 conf/org.gnome.Pass.SearchProvider.service.dbus "${DATADIR}"/dbus-1/services/org.gnome.Pass.SearchProvider.service
+	@install -Dm 0644 conf/org.gnome.Pass.SearchProvider.ini "${DATADIR}"/gnome-shell/search-providers/org.gnome.Pass.SearchProvider.ini
 
 	@mkdir -m 0755 -p "${DOC_DIR}"/gnome-pass-search-provider
 	@cat build/changelog | gzip -n9 > "${DOC_DIR}"/gnome-pass-search-provider/changelog.gz
-	@install build/copyright "${DOC_DIR}"/gnome-pass-search-provider/copyright
+	@install -m 0755 build/copyright "${DOC_DIR}"/gnome-pass-search-provider/copyright
 
 	@mkdir -m 0755 -p "${LIBDIR}"/gnome-pass-search-provider
 	@install -Dm 0755 gnome-pass-search-provider.py "${LIBDIR}"/gnome-pass-search-provider/gnome-pass-search-provider.py
@@ -34,12 +32,12 @@ install: build/copyright build/changelog
 
 uninstall:
 	@apt remove python3-fuzzywuzzy
-	@xdg-desktop-menu uninstall --novendor org.gnome.Pass.SearchProvider.desktop
 	@rm -r "${DOC_DIR}"/gnome-pass-search-provider
 	@rm -r "${LIBDIR}"/gnome-pass-search-provider
 
-	@rm "${DATADIR}"/gnome-shell/search-providers/org.gnome.Pass.SearchProvider.ini
+	@rm "${DATADIR}"/applications/org.gnome.Pass.SearchProvider.desktop
 	@rm "${DATADIR}"/dbus-1/services/org.gnome.Pass.SearchProvider.service
+	@rm "${DATADIR}"/gnome-shell/search-providers/org.gnome.Pass.SearchProvider.ini
 
 	@rm "${LIBDIR}"/systemd/user/org.gnome.Pass.SearchProvider.service
 
@@ -51,7 +49,7 @@ build:
 
 
 build/changelog: build
-	@git log --oneline --decorate > build/changelog
+	@git log --oneline --no-merges --format="%h %d %ai%n    %an <%ae>%n    %s" > build/changelog
 
 
 build/copyright: build
@@ -64,7 +62,7 @@ build/package/DEBIAN: build
 
 build/package/DEBIAN/control: build/package/DEBIAN/md5sums
 	@echo "Package: gnome-pass-search-provider" > build/package/DEBIAN/control
-	@echo "Version: 1.0.0.`git log --format=%h -1`" >> build/package/DEBIAN/control
+	@echo "Version: 1.0.0-`git log --format=%h -1`" >> build/package/DEBIAN/control
 	@echo "Section: gnome" >> build/package/DEBIAN/control
 	@echo "Priority: optional" >> build/package/DEBIAN/control
 	@echo "Architecture: all" >> build/package/DEBIAN/control
@@ -110,15 +108,3 @@ build/package/DEBIAN/md5sums: gnome-pass-search-provider.py conf/org.gnome.Pass.
 	@md5sum `find build/package -type f -not -path "*DEBIAN*"` > build/md5sums
 	@sed -e "s/build\/package\///" build/md5sums > build/package/DEBIAN/md5sums
 	@chmod 644 build/package/DEBIAN/md5sums
-
-
-build/package/DEBIAN/postinst: build/package/DEBIAN
-	@echo "#!/bin/sh -e" > build/package/DEBIAN/postinst
-	@echo "xdg-desktop-menu install --novendor conf/org.gnome.Pass.SearchProvider.desktop" >> build/package/DEBIAN/postinst
-	@chmod 755 build/package/DEBIAN/postinst
-
-
-build/package/DEBIAN/prerm: build/package/DEBIAN
-	@echo "#!/bin/sh -e" > build/package/DEBIAN/prerm
-	@echo "xdg-desktop-menu uninstall --novendor org.gnome.Pass.SearchProvider.desktop" >> build/package/DEBIAN/prerm
-	@chmod 755 build/package/DEBIAN/prerm
