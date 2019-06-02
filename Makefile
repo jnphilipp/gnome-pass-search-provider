@@ -35,7 +35,6 @@ install: build/copyright build/changelog
 uninstall:
 	@apt remove python3-fuzzywuzzy
 	@xdg-desktop-menu uninstall --novendor org.gnome.Pass.SearchProvider.desktop
-
 	@rm -r "${DOC_DIR}"/gnome-pass-search-provider
 	@rm -r "${LIBDIR}"/gnome-pass-search-provider
 
@@ -115,7 +114,7 @@ build/package/DEBIAN/md5sums: gnome-pass-search-provider.py conf/org.gnome.Pass.
 
 build/package/DEBIAN/postinst: build/package/DEBIAN
 	@echo "#!/bin/sh -e" > build/package/DEBIAN/postinst
-	@echo "xdg-desktop-menu install --novendor ${DATADIR}/applications/org.gnome.Pass.SearchProvider.desktop" >> build/package/DEBIAN/postinst
+	@echo "xdg-desktop-menu install --novendor conf/org.gnome.Pass.SearchProvider.desktop" >> build/package/DEBIAN/postinst
 	@chmod 755 build/package/DEBIAN/postinst
 
 
