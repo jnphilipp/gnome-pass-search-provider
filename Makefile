@@ -50,10 +50,12 @@ build:
 
 build/changelog: build
 	@git log --oneline --no-merges --format="%h %d %ai%n    %an <%ae>%n    %s" > build/changelog
+	@cat build/changelog | gzip -n9 > build/changelog.gz
 
 
 build/copyright: build
-	@echo "Upstream-Name: gnome-pass-search-provider\nSource: https://github.com/jnphilipp/gnome-pass-search-provider\n\nFiles: *\nCopyright: Copyright 2017-2019 Jonathan Lestrelin (jle64) <jonathan.lestrelin@gmail.com>, Nathanael Philipp (jnphilipp) <nathanael@philipp.land>\nLicense: GPL-3+\n This program is free software; you can redistribute it\n and/or modify it under the terms of the GNU General Public\n License as published by the Free Software Foundation; either\n version 3 of the License, or (at your option) any later\n version.\n .\n This program is distributed in the hope that it will be\n useful, but WITHOUT ANY WARRANTY; without even the implied\n warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n PURPOSE.  See the GNU General Public License for more\n details.\n .\n You should have received a copy of the GNU General Public\n License along with this package; if not, write to the Free\n Software Foundation, Inc., 51 Franklin St, Fifth Floor,\n Boston, MA  02110-1301 USA\n .\n On Debian systems, the full text of the GNU General Public\n License version 3 can be found in the file\n '/usr/share/common-licenses/GPL-3'." > build/copyright
+	@echo "Upstream-Name: gnome-pass-search-provider\nSource: https://github.com/jnphilipp/gnome-pass-search-provider\n\nFiles: *\nCopyright: Copyright 2017-2019 Jonathan Lestrelin (jle64) <jonathan.lestrelin@gmail.com>, J. Nathanael Philipp (jnphilipp) <nathanael@philipp.land>\nLicense: GPL-3+\n This program is free software; you can redistribute it\n and/or modify it under the terms of the GNU General Public\n License as published by the Free Software Foundation; either\n version 3 of the License, or (at your option) any later\n version.\n .\n This program is distributed in the hope that it will be\n useful, but WITHOUT ANY WARRANTY; without even the implied\n warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n PURPOSE.  See the GNU General Public License for more\n details.\n .\n You should have received a copy of the GNU General Public\n License along with this package; if not, write to the Free\n Software Foundation, Inc., 51 Franklin St, Fifth Floor,\n Boston, MA  02110-1301 USA\n .\n On Debian systems, the full text of the GNU General Public\n License version 3 can be found in the file\n '/usr/share/common-licenses/GPL-3'." > build/copyright
+	@echo "[COPYRIGHT]\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/." > build/copyright.h2m
 
 
 build/package/DEBIAN: build
@@ -66,10 +68,10 @@ build/package/DEBIAN/control: build/package/DEBIAN/md5sums
 	@echo "Section: gnome" >> build/package/DEBIAN/control
 	@echo "Priority: optional" >> build/package/DEBIAN/control
 	@echo "Architecture: all" >> build/package/DEBIAN/control
-	@echo "Depends: python3 (>= 3), python3-fuzzywuzzy, hicolor-icon-theme, pass" >> build/package/DEBIAN/control
+	@echo "Depends: python3 (>= 3.6), python3-fuzzywuzzy, hicolor-icon-theme, pass" >> build/package/DEBIAN/control
 	@echo "Recommends: gpaste" >> build/package/DEBIAN/control
 	@echo "Installed-Size: `du -csk build/package/usr | grep -oE "[0-9]+\stotal" | cut -f 1`" >> build/package/DEBIAN/control
-	@echo "Maintainer: Nathanael Philipp <nathanael@philipp.land>" >> build/package/DEBIAN/control
+	@echo "Maintainer: J. Nathanael Philipp <nathanael@philipp.land>" >> build/package/DEBIAN/control
 	@echo "Homepage: https://github.com/jnphilipp/gnome-pass-search-provider" >> build/package/DEBIAN/control
 	@echo "Description: zx2c4/pass search provider for GNOME Shell" >> build/package/DEBIAN/control
 	@echo " Extends GNOME Shell search results to include zx2c4/pass passwords.\n Names of passwords will show up in GNOME Shell searches, choosing one will\n copy the corresponding content to the clipboard. Supports pass-otp extension." >> build/package/DEBIAN/control
