@@ -67,6 +67,7 @@ build/package/DEBIAN/control: build/package/DEBIAN/md5sums
 	@echo "Priority: optional" >> build/package/DEBIAN/control
 	@echo "Architecture: all" >> build/package/DEBIAN/control
 	@echo "Depends: python3 (>= 3), python3-fuzzywuzzy, hicolor-icon-theme, pass" >> build/package/DEBIAN/control
+	@echo "Recommends: gpaste" >> build/package/DEBIAN/control
 	@echo "Installed-Size: `du -csk build/package/usr | grep -oE "[0-9]+\stotal" | cut -f 1`" >> build/package/DEBIAN/control
 	@echo "Maintainer: Nathanael Philipp <nathanael@philipp.land>" >> build/package/DEBIAN/control
 	@echo "Homepage: https://github.com/jnphilipp/gnome-pass-search-provider" >> build/package/DEBIAN/control
