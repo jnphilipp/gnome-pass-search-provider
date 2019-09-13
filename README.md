@@ -12,8 +12,7 @@ Install `gnome-pass-search-provider-git` from the AUR.
 
 Ensure that python>=3.5 and python-gobject are installed on your system and that pass is setup.
 
-Install Python 3 fuzzywuzzy module.
-Depending on your distribution this can be packaged as python-fuzzywuzzy, python3-fuzzywuzzy or you might need to install it with pip:
+For the search the Python 3 fuzzywuzzy module is required the make will try to install the package python3-fuzzywuzzy. To install it with pip:
 ```shell
 python3 -m pip install fuzzywuzzy
 ```
@@ -23,9 +22,9 @@ Download or clone this repository:
 git clone git@github.com:jle64/gnome-shell-pass-search-provider.git
 ```
 
-Run the installation script as root:
+Installation via ```make``` as root:
 ```shell
-sudo ./install.sh
+sudo make install
 ```
 
 # Post-installation
